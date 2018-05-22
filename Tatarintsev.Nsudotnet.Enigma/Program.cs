@@ -10,52 +10,52 @@ namespace Tatarintsev.Nsudotnet.Enigma
 {
     class Program
     {
-        delegate void Algorithm();
+        
         static string inFile;
         static string outFile;
         static void Main(string[] args)
         {
-            if (args[0].Equals("encrypt"))
+            if (args[0]==("encrypt"))
             {
                 inFile = args[1];
                 outFile = args[3];
-                algChooser(args[2]);
+                AlgChooser(args[2]);
             }
-            else if (args[0].Equals("decrypt"))
+            else if (args[0]==("decrypt"))
             {
                 inFile = args[1];
                 outFile = args[4];
-                algChooser(args[2], args[3]);
+                AlgChooser(args[2], args[3]);
             }
             else
-                Console.WriteLine("Wrong 1st argument. Should be encrypt or decrypt.");
+                Console.WriteLine("Wrong 1st argument. Should be Encrypt or Decrypt.");
         }
 
-        static void algChooser(string algorithm)
+        static void AlgChooser(string algorithm)
         {
             switch (algorithm)
             {
-                case ("rc2"): { var Alg = RC2.Create(); encrypt(Alg); break; }
-                case ("aes"): { var Alg = Aes.Create(); encrypt(Alg); break; }
-                case ("des"): { var Alg = DES.Create(); encrypt(Alg); break; }
-                case ("rijndael"): { var Alg = Rijndael.Create(); encrypt(Alg); break; }
+                case ("rc2"): { var alg = RC2.Create(); Encrypt(alg); break; }
+                case ("aes"): { var alg = Aes.Create(); Encrypt(alg); break; }
+                case ("des"): { var alg = DES.Create(); Encrypt(alg); break; }
+                case ("rijndael"): { var alg = Rijndael.Create(); Encrypt(alg); break; }
                 default: { Console.WriteLine("Wrong 2nd argument. Should be rc2 or aes or des or rijndael."); break; }
             }
         }
 
-        static void algChooser(string algorithm,string keyFile)
+        static void AlgChooser(string algorithm,string keyFile)
         {
             switch (algorithm)
             {
-                case ("rc2"): { var Alg = RC2.Create(); decrypt(Alg, keyFile); break; }
-                case ("aes"): { var Alg = Aes.Create(); decrypt(Alg, keyFile); break; }
-                case ("des"): { var Alg = DES.Create(); decrypt(Alg, keyFile); break; }
-                case ("rijndael"): { var Alg = Rijndael.Create(); decrypt(Alg, keyFile); break; }
+                case ("rc2"): { var alg = RC2.Create(); Decrypt(alg, keyFile); break; }
+                case ("aes"): { var alg = Aes.Create(); Decrypt(alg, keyFile); break; }
+                case ("des"): { var alg = DES.Create(); Decrypt(alg, keyFile); break; }
+                case ("rijndael"): { var alg = Rijndael.Create(); Decrypt(alg, keyFile); break; }
                 default: { Console.WriteLine("Wrong 2nd argument. Should be rc2 or aes or des or rijndael."); break; }
             }
         }
 
-        static void encrypt(dynamic alg)
+        static void Encrypt(dynamic alg)
         {
             try
             {
@@ -91,7 +91,7 @@ namespace Tatarintsev.Nsudotnet.Enigma
             }
         }
 
-        static void decrypt(dynamic alg, string keyFile)
+        static void Decrypt(dynamic alg, string keyFile)
         {
             try
             {

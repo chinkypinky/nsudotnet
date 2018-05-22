@@ -35,10 +35,10 @@ namespace Tatarintsev.Nsudotnet.Enigma
         {
             switch (algorithm)
             {
-                case ("rc2"): { var alg = RC2.Create(); Encrypt(alg); break; }
-                case ("aes"): { var alg = Aes.Create(); Encrypt(alg); break; }
-                case ("des"): { var alg = DES.Create(); Encrypt(alg); break; }
-                case ("rijndael"): { var alg = Rijndael.Create(); Encrypt(alg); break; }
+                case ("rc2"): {  Encrypt(RC2.Create()); break; }
+                case ("aes"): { Encrypt(Aes.Create()); break; }
+                case ("des"): {  Encrypt(DES.Create()); break; }
+                case ("rijndael"): { Encrypt(Rijndael.Create()); break; }
                 default: { Console.WriteLine("Wrong 2nd argument. Should be rc2 or aes or des or rijndael."); break; }
             }
         }
@@ -47,15 +47,15 @@ namespace Tatarintsev.Nsudotnet.Enigma
         {
             switch (algorithm)
             {
-                case ("rc2"): { var alg = RC2.Create(); Decrypt(alg, keyFile); break; }
-                case ("aes"): { var alg = Aes.Create(); Decrypt(alg, keyFile); break; }
-                case ("des"): { var alg = DES.Create(); Decrypt(alg, keyFile); break; }
-                case ("rijndael"): { var alg = Rijndael.Create(); Decrypt(alg, keyFile); break; }
+                case ("rc2"): {  Decrypt(RC2.Create(), keyFile); break; }
+                case ("aes"): {  Decrypt(Aes.Create(), keyFile); break; }
+                case ("des"): {  Decrypt(DES.Create(), keyFile); break; }
+                case ("rijndael"): {  Decrypt(Rijndael.Create(), keyFile); break; }
                 default: { Console.WriteLine("Wrong 2nd argument. Should be rc2 or aes or des or rijndael."); break; }
             }
         }
 
-        static void Encrypt(dynamic alg)
+        static void Encrypt(SymmetricAlgorithm alg)
         {
             try
             {
@@ -91,7 +91,7 @@ namespace Tatarintsev.Nsudotnet.Enigma
             }
         }
 
-        static void Decrypt(dynamic alg, string keyFile)
+        static void Decrypt(SymmetricAlgorithm alg, string keyFile)
         {
             try
             {

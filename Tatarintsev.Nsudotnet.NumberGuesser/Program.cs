@@ -8,13 +8,13 @@ namespace Tatarintsev.Nsudotnet.NumberGuesser
 
         static int Main(string[] args)
         {
-            string[] history = new string[1000];
-            string[] looserPhrases = { "Едрить ты бестолочь." ,
-                "Даже моя бабушка быстрее тебя угадала.",
-                "Мдаа... С таким IQ как ты вообще компьютер включил.",
-                "Лучше сдайся. Не позорь себя..."};
             Console.WriteLine("Введи свое имя.");
-            string name= Console.In.ReadLine(),tmpString;
+            string name = Console.In.ReadLine(), tmpString;
+            string[] history = new string[1000];
+            string[] looserPhrases = { String.Format("{0}! Едрить ты бестолочь.",name) ,
+               String.Format( "{0}! Даже моя бабушка быстрее тебя угадала.",name),
+                String.Format("{0}! Мдаа... С таким IQ как ты вообще компьютер включил.",name),
+                String.Format("{0}! Лучше сдайся. Не позорь себя...",name)};
             int randomNumber = new Random().Next(101), curNumber,forth=0;
             Console.WriteLine("Погнали! Введи число.");
             DateTime begin =  DateTime.Now;
@@ -35,7 +35,7 @@ namespace Tatarintsev.Nsudotnet.NumberGuesser
                     else
                     {
                         DateTime end = DateTime.Now;
-                        Console.WriteLine("Ну наконец-то! Боже мой, с {0} попытки... И не прошло и {1} минут. А нет, прошло... ",++forth,(end-begin).Minutes);
+                        Console.WriteLine("Ну наконец-то! Боже мой, с {0} попытки... И не прошло и {1} минут. А нет, прошло... ",++forth,(end-begin).Minutes+(end-begin).Hours*60);
                         foreach(string i in history)
                         {
                             if (i == null)
@@ -54,7 +54,7 @@ namespace Tatarintsev.Nsudotnet.NumberGuesser
                     Console.WriteLine("Сказали же тебе, что надо число ввести,болван!");
                 forth++;
                 if (forth % 4 == 0)
-                    Console.WriteLine("{0}! {1}",name,looserPhrases[new Random().Next(4)]);
+                    Console.WriteLine(looserPhrases[new Random().Next(4)]);
             }
             return 0;
         }

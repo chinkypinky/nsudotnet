@@ -89,6 +89,10 @@ namespace Tatarintsev.Nsudotnet.Enigma
             {
                 Console.WriteLine("A file error occurred: {0}", e.Message);
             }
+            finally
+            {
+                alg.Dispose();
+            }
         }
 
         static void Decrypt(SymmetricAlgorithm alg, string keyFile)
@@ -129,6 +133,10 @@ namespace Tatarintsev.Nsudotnet.Enigma
             catch (UnauthorizedAccessException e)
             {
                 Console.WriteLine("A file error occurred: {0}", e.Message);
+            }
+            finally
+            {
+                alg.Dispose();
             }
         }
     }

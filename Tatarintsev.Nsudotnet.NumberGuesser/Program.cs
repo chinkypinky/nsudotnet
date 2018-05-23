@@ -34,8 +34,8 @@ namespace Tatarintsev.Nsudotnet.NumberGuesser
                     }
                     else
                     {
-                        DateTime end = DateTime.Now;
-                        Console.WriteLine("Ну наконец-то! Боже мой, с {0} попытки... И не прошло и {1} минут. А нет, прошло... ",++forth,(end-begin).Minutes+(end-begin).Hours*60);
+                        DateTime end = DateTime.Now; 
+                        Console.WriteLine("Ну наконец-то! Боже мой, с {0} попытки... И не прошло и {1} минут. А нет, прошло... ",++forth,(end-begin).TotalMinutes);
                         foreach(string i in history)
                         {
                             if (i == null)

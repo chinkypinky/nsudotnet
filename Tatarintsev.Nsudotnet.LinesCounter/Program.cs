@@ -24,10 +24,7 @@ namespace Tatarintsev.Nsudotnet.LinesCounter
 
             foreach (FileInfo files in root.GetFiles(extension))
             {
-
-                Console.WriteLine(files.Name);
                 lines += LinesCount(files);
-
             }
 
             foreach (DirectoryInfo dir in root.GetDirectories())

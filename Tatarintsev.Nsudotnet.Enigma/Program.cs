@@ -59,22 +59,20 @@ namespace Tatarintsev.Nsudotnet.Enigma
         {
             try
             {
-                using (StreamReader sr = new StreamReader(File.Open(inFile, FileMode.Open, FileAccess.Read)))
+                using (alg)
                 {
-                    using (FileStream fs = File.Open(outFile, FileMode.Create))
+                    using (FileStream fsr = File.Open(inFile, FileMode.Open, FileAccess.Read))
                     {
-                        using (StreamWriter keyFS = new StreamWriter(File.Create("file.key.txt")))
+                        using (FileStream fsw = File.Open(outFile, FileMode.Create))
                         {
-                            using (CryptoStream cs = new CryptoStream(fs, alg.CreateEncryptor(alg.Key, alg.IV), CryptoStreamMode.Write))
+                            using (StreamWriter keyFS = new StreamWriter(File.Create("file.key.txt")))
                             {
-                                using (BinaryWriter bw = new BinaryWriter(cs))
+                                using (CryptoStream cs = new CryptoStream(fsw, alg.CreateEncryptor(alg.Key, alg.IV), CryptoStreamMode.Write))
                                 {
-                                    
-                                    String line;
-                                    while ((line = sr.ReadLine()) != null)
-                                        bw.Write(line);
+                                    fsr.CopyTo(cs);
                                     keyFS.WriteLine(Convert.ToBase64String(alg.IV));
                                     keyFS.WriteLine(Convert.ToBase64String(alg.Key));
+
                                 }
                             }
                         }
@@ -89,37 +87,26 @@ namespace Tatarintsev.Nsudotnet.Enigma
             {
                 Console.WriteLine("A file error occurred: {0}", e.Message);
             }
-            finally
-            {
-                alg.Dispose();
-            }
+           
         }
 
         static void Decrypt(SymmetricAlgorithm alg, string keyFile)
         {
             try
             {
-                int strCount = 0;
-                using (StreamReader sr = new StreamReader(File.Open(outFile, FileMode.OpenOrCreate, FileAccess.ReadWrite)))
+                using (alg)
                 {
-                    while (sr.ReadLine() != null)
-                        strCount++;
-                }
-
-                using (FileStream fs = File.Open(inFile, FileMode.Open, FileAccess.Read))
-                {
-                    using (StreamWriter sw = new StreamWriter(File.Open(outFile, FileMode.Create, FileAccess.Write)))
+                    using (FileStream fsr = File.Open(inFile, FileMode.Open, FileAccess.Read))
                     {
-                        using (StreamReader keyFR = new StreamReader(File.Open("file.key.txt", FileMode.Open, FileAccess.Read)))
+                        using (FileStream fsw = File.Open(outFile, FileMode.Create, FileAccess.Write))
                         {
-                            byte[] IV = Convert.FromBase64String(keyFR.ReadLine());
-                            byte[] key = Convert.FromBase64String(keyFR.ReadLine());
-                            using (CryptoStream cs = new CryptoStream(fs, alg.CreateDecryptor(key, IV), CryptoStreamMode.Read))
+                            using (StreamReader keyFR = new StreamReader(File.Open("file.key.txt", FileMode.Open, FileAccess.Read)))
                             {
-                                using (BinaryReader br = new BinaryReader(cs))
+                                byte[] IV = Convert.FromBase64String(keyFR.ReadLine());
+                                byte[] key = Convert.FromBase64String(keyFR.ReadLine());
+                                using (CryptoStream cs = new CryptoStream(fsr, alg.CreateDecryptor(key, IV), CryptoStreamMode.Read))
                                 {
-                                    for(;strCount>0;strCount--)
-                                        sw.WriteLine(br.ReadString());
+                                    cs.CopyTo(fsw);
                                 }
                             }
                         }
@@ -134,10 +121,7 @@ namespace Tatarintsev.Nsudotnet.Enigma
             {
                 Console.WriteLine("A file error occurred: {0}", e.Message);
             }
-            finally
-            {
-                alg.Dispose();
-            }
+           
         }
     }
 }

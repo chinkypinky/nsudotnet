@@ -15,24 +15,24 @@ namespace Tatarintsev.Nsudotnet.LinesCounter
         {
             extension = args[0];
             DirectoryInfo directory = new DirectoryInfo(@AppDomain.CurrentDomain.BaseDirectory);
-            Console.WriteLine(WalkDirTree(directory));         
+            Console.WriteLine(WalkDirTree(directory));
         }
-        
-        static int WalkDirTree(DirectoryInfo dir)
+
+        static int WalkDirTree(DirectoryInfo root)
         {
             int lines = 0;
-           
-                foreach (System.IO.FileInfo files in dir.GetFiles(extension))
-                {
-               
-                    Console.WriteLine(files.Name);
-                    lines += LinesCount(files);
-               
-              }
-           
-            foreach (DirectoryInfo dirInfo in dir.GetDirectories())
+
+            foreach (FileInfo files in root.GetFiles(extension))
             {
-               lines+= WalkDirTree(dirInfo);
+
+                Console.WriteLine(files.Name);
+                lines += LinesCount(files);
+
+            }
+
+            foreach (DirectoryInfo dir in root.GetDirectories())
+            {
+                lines += WalkDirTree(dir);
             }
             return lines;
         }
@@ -48,29 +48,40 @@ namespace Tatarintsev.Nsudotnet.LinesCounter
                     String line;
                     while ((line = sr.ReadLine()) != null)
                     {
-                        if (!skipMode) {
-                            line= new String(line
-                                     .Where(x => x != ' ' && x != '\r' && x != '\n')
-                                     .ToArray());
-                            if (line.Length == 0)
-                                continue;
-                            if (line.First() == '/')
+                        if (!skipMode)
+                        {
+                            for (int i = 0; i < line.Length; i++)
                             {
-                                if (line.ElementAt(1) == '*')
-                                    skipMode = true;
-                                continue;
+                                if (line[i] == '/' && i < line.Length - 1)
+                                {
+                                    if (line[i + 1] == '*')
+                                    {
+                                        skipMode = true;
+                                        break;
+                                    }
+                                    if (line[i + 1] == '/')
+                                        break;
+                                }
+                                if (line[i] != ' ' && line[i] != '\t' && line[i] != '\n')
+                                {
+                                    lines++;
+                                    break;
+                                }
                             }
-                            lines++;
                         }
                         else
                         {
                             if (line.Contains("*/"))
+                            {
                                 skipMode = false;
+                                continue;
+                            }
                         }
                     }
-                        
+
                 }
-            }catch(IOException e) { Console.WriteLine(e); }
+            }
+            catch (IOException e) { Console.WriteLine(e); }
             return lines;
         }
     }
